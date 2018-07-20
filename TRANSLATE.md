@@ -32,7 +32,7 @@ Here you have two variants:
 In both case you end up with a directory with a json file representing the deck's data and `media/` 
 directory with deck's media files.    
 
-## Extract information into CSV
+### Extract information into CSV
 
 First you need to know the ordinal number of the field you want to update. Open the JSON-file
 you got on the previous step and find the `notes` section in there. Here goes a collection of deck's 
@@ -40,21 +40,21 @@ notes. Check out the first note and locate the field of your interest.
 
 For example, let's pick the JSON-file from [Ultimate Geography](https://github.com/axelboc/anki-ultimate-geography) deck:
 
-```json
-    "notes": [
-        {
-            "__type__": "Note", 
-            "data": "", 
-            "fields": [
-                "England", 
-                "Constituent country of the United Kingdom.",
-                ... 
+```
+  "notes": [
+    {
+      "__type__": "Note", 
+      "data": "", 
+      "fields": [
+        "England", 
+        "Constituent country of the United Kingdom.",
+        ...
 ```
 
-Let's imagine we're translating country names. Notice that they go in the 0th position of the `fields` array. We will 
-reference it in our examples below.
+Let's imagine we're translating country names only. Notice that they go in the 0'th position of the `fields` array. We'll 
+be referencing it in our examples below.
 
-Here is how you can export field data into CSV using **jq**:  
+Here is how you can export a field's data into CSV using **jq**:  
 
 ```
 $ { echo "data"; jq -r '. | .notes[] | .fields[OFFSET] | [.] | @csv' < JSON; } > CSV
@@ -66,7 +66,7 @@ where:
   - `JSON` is the original JSON-file;
   - `CSV` is a CSV-file to export data into.
 
-This is how we can export country names:
+This is how we export our country names:
 
 ```
 $ { echo "name"; jq -r '. | .notes[] | .fields[0] | [.] | @csv' < Ultimate_Geography.json; } > CountryNames.csv
@@ -86,7 +86,7 @@ name
 
 Now let's translate them.
 
-## Editing CSV data
+### Editing CSV data
 
 You can use any tool to edit your CSV data but since 
 [Google Spreadsheets](https://docs.google.com/spreadsheets/u/0/) can export data back into 
@@ -97,7 +97,7 @@ The first **CountryNames** sheet contains the original data imported from the CS
 The second **RU** sheet contains translated country names. Translation is performed
 automatically using [*=GoogleTranslate()* function](https://support.google.com/docs/answer/3093331?hl=en).
  
-## Export new data into JSON
+### Export new data into JSON
 
 To export data into JSON we will use [Export Sheet Data](https://chrome.google.com/webstore/detail/export-sheet-data/bfdcopkbamihhchdnjghdknibmcnfplk?utm_source=permalink) 
 Google Spreadsheets add-on. 
@@ -125,7 +125,7 @@ $ cat RU.json | head -n 6
   "Франция",
 ```
 
-## Patching the original JSON-file
+### Patching the original JSON-file
 
 To apply the patch we will use **jq** one more time. In a generic form our command look like:  
 
